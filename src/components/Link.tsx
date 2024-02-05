@@ -1,10 +1,7 @@
-import React from 'react';
+import { Link as LinkModel } from '../model/link';
 
 interface Props {
-  link: {
-    description: string;
-    url: string;
-  };
+  link: LinkModel;
 }
 
 export default function Link({ link }: Props) {
