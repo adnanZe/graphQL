@@ -1,5 +1,9 @@
-import React from 'react';
+import LinkList from '../components/LinkList';
 
 export default function Home() {
-  return <h1>Home</h1>;
+  return (
+    <div>
+      <LinkList />
+    </div>
+  );
 }
