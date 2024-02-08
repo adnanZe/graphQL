@@ -1,5 +1,6 @@
 import React from 'react';
+import CreateLink from '../components/CreateLink';
 
 export default function FirstPage() {
-  return <h1>FirstPage</h1>;
+  return <CreateLink />;
 }
