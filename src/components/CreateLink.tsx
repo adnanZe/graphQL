@@ -33,7 +33,7 @@ export default function CreateLink() {
           createLink();
         }}
       >
-        <div className="flex flex-column mt3">
+        <div className="flex flex-column mt3 pb2">
           <input
             className="mb2"
             value={formState.description}
