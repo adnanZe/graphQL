@@ -1,8 +1,10 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AUTH_TOKEN from '../model/constants';
 
 export default function Login() {
   const navigate = useNavigate();
+  const authToken = localStorage.getItem(AUTH_TOKEN);
   const [formState, setFormState] = useState({
     login: true,
     email: '',
