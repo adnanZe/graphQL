@@ -1,5 +1,6 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { gql } from '@apollo/client';
 import AUTH_TOKEN from '../model/constants';
 
 const SIGNUP_MUTATION = gql`
