@@ -29,6 +29,29 @@ export default function Login() {
     name: '',
   });
 
+  const [login] = useMutation(LOGIN_MUTATION, {
+    variables: {
+      email: formState.email,
+      password: formState.password,
+    },
+    onCompleted: ({ login }) => {
+      localStorage.setItem(AUTH_TOKEN, login.token);
+      navigate('/');
+    },
+  });
+
+  const [signup] = useMutation(SIGNUP_MUTATION, {
+    variables: {
+      name: formState.name,
+      email: formState.email,
+      password: formState.password,
+    },
+    onCompleted: ({ signup }) => {
+      localStorage.setItem(AUTH_TOKEN, signup.token);
+      navigate('/');
+    },
+  });
+
   const handleChangeName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setFormState({
@@ -59,7 +82,9 @@ export default function Login() {
     [formState]
   );
 
-  const handleLogin = useCallback(() => {}, []);
+  const handleLogin = useCallback(() => {
+    formState.login ? login : signup;
+  }, [formState.login]);
 
   const handleToggleLogin = useCallback(() => {
     setFormState({
