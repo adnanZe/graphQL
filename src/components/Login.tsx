@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { gql } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import AUTH_TOKEN from '../model/constants';
 
 const SIGNUP_MUTATION = gql`
@@ -18,10 +18,9 @@ const LOGIN_MUTATION = gql`
     }
   }
 `;
-
 export default function Login() {
   const navigate = useNavigate();
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  // const authToken = localStorage.getItem(AUTH_TOKEN);
   const [formState, setFormState] = useState({
     login: true,
     email: '',
@@ -29,7 +28,7 @@ export default function Login() {
     name: '',
   });
 
-  const [login] = useMutation(LOGIN_MUTATION, {
+  const [loginUser] = useMutation(LOGIN_MUTATION, {
     variables: {
       email: formState.email,
       password: formState.password,
@@ -40,7 +39,7 @@ export default function Login() {
     },
   });
 
-  const [signup] = useMutation(SIGNUP_MUTATION, {
+  const [signupUser] = useMutation(SIGNUP_MUTATION, {
     variables: {
       name: formState.name,
       email: formState.email,
@@ -83,8 +82,12 @@ export default function Login() {
   );
 
   const handleLogin = useCallback(() => {
-    formState.login ? login : signup;
-  }, [formState.login]);
+    if (formState.login) {
+      loginUser();
+    } else {
+      signupUser();
+    }
+  }, [formState.login, loginUser, signupUser]);
 
   const handleToggleLogin = useCallback(() => {
     setFormState({

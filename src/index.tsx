@@ -7,6 +7,7 @@ import {
   createHttpLink,
   InMemoryCache,
 } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import App from './App';
 import './assets/css/index.css';
 
@@ -23,6 +24,16 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
