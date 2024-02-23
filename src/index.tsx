@@ -12,18 +12,12 @@ import App from './App';
 import './assets/css/index.css';
 
 import queryClient from './services/reactQueryClient';
+import AUTH_TOKEN from './model/constants';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
 });
 
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-});
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem(AUTH_TOKEN);
   return {
@@ -33,6 +27,13 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 
 root.render(
   <React.StrictMode>
