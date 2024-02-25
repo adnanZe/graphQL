@@ -1,7 +1,29 @@
 import { useCallback } from 'react';
-import AUTH_TOKEN from '../model/constants';
 import { Link as LinkModel } from '../model/link';
 import { timeDifferenceForDate } from '../services/time';
+import AUTH_TOKEN from '../model/constants';
+import { gql, useMutation } from '@apollo/client';
+import { FEED_QUERY } from './LinkList';
+
+const VOTE_MUTATION = gql`
+  mutation VoteMutation($linkId: ID!) {
+    vote(linkId: $linkId) {
+      id
+      link {
+        id
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
+      user {
+        id
+      }
+    }
+  }
+`;
 
 interface Props {
   link: LinkModel;
@@ -12,8 +34,38 @@ export default function Link({ link, index }: Props) {
   const authToken = localStorage.getItem(AUTH_TOKEN);
 
   const handleVote = useCallback(() => {
-    console.log('Clicked vote button');
+    vote();
   }, []);
+
+  const [vote] = useMutation(VOTE_MUTATION, {
+    variables: {
+      linkId: link.id,
+    },
+    update: (cache, { data: { vote } }) => {
+      const { feed }: any = cache.readQuery({
+        query: FEED_QUERY,
+      });
+
+      const updatedLinks = feed.links.map((feedLink: any) => {
+        if (feedLink.id === link.id) {
+          return {
+            ...feedLink,
+            votes: [...feedLink.votes, vote],
+          };
+        }
+        return feedLink;
+      });
+
+      cache.writeQuery({
+        query: FEED_QUERY,
+        data: {
+          feed: {
+            links: updatedLinks,
+          },
+        },
+      });
+    },
+  });
 
   return (
     <div className="flex mt2 items-start">
