@@ -4,6 +4,7 @@ import FirstPage from '../pages/FirstPage';
 import Home from '../pages/Home';
 import Layout from '../pages/Layout';
 import Login from '../components/Login';
+import Search from '../components/Search';
 
 const appRouter = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const appRouter = createBrowserRouter([
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/search',
+        element: <Search />,
       },
     ],
   },
